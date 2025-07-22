@@ -124,7 +124,7 @@ impl StackState {
 
     /// Derives the stack depth (b0 helper column) from the overflow table
     pub fn stack_depth(&self) -> Felt {
-        Felt::new((MIN_STACK_DEPTH + self.overflow.total_num_elements()) as u64)
+        Felt::new((MIN_STACK_DEPTH + self.overflow.num_elements_in_current_ctx()) as u64)
     }
 
     /// Derives the overflow address (b1 helper column) from the overflow table
@@ -134,6 +134,11 @@ impl StackState {
 
     pub fn num_overflow_elements_in_current_ctx(&self) -> usize {
         self.overflow.num_elements_in_current_ctx()
+    }
+
+    pub fn advance_clock(&mut self) {
+        // Advance the overflow table clock to the next row
+        self.overflow.advance_clock();
     }
 
     pub fn push_overflow(&mut self, element: Felt) {
